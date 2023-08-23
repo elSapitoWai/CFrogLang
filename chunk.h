@@ -1,5 +1,5 @@
 //
-// Created by pa2ga on 22/08/2023.
+// Created by sapo on 22/08/2023.
 //
 
 #ifndef CFROGLANG_CHUNK_H
@@ -16,5 +16,9 @@ typedef struct {
     int capacity;
     uint8_t* code;
 } Chunk;
+
+void initChunk(Chunk* chunk);
+void freeChunk(Chunk* chunk);
+void writeChunk(Chunk* chunk, uint8_t byte);
 
 #endif //CFROGLANG_CHUNK_H

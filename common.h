@@ -1,5 +1,5 @@
 //
-// Created by pa2ga on 22/08/2023.
+// Created by sapo on 22/08/2023.
 //
 
 #ifndef CFROGLANG_COMMON_H
