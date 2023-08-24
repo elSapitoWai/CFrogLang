@@ -15,6 +15,10 @@
 
 /*
  * Frees the memory on an array
+ *
+ * type: type of values stored
+ * pointer: pointer to the array
+ * oldCount: capacity of the array
  */
 #define FREE_ARRAY(type, pointer, oldCount) \
     reallocate(pointer, sizeof(type) * (oldCount), 0)
