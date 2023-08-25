@@ -2,7 +2,7 @@
 // Created by sapo on 23/08/2023.
 //
 
-#include "stdlib.h"
+#include "stdio.h"
 
 #include "chunk.h"
 #include "memory.h"
@@ -14,7 +14,7 @@ void initChunk(Chunk* chunk) {
     chunk->count = 0;
     chunk->capacity = 0;
     chunk->code = NULL;
-    chunk->lines = NULL;
+    initLinesArray(&chunk->lines);
     initValueArray(&chunk->constants);
 }
 
@@ -23,7 +23,7 @@ void initChunk(Chunk* chunk) {
  */
 void freeChunk(Chunk* chunk) {
     FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
-    FREE_ARRAY(int, chunk->lines, chunk->capacity);
+    freeLinesArray(&chunk->lines);
     freeValueArray(&chunk->constants);
     initChunk(chunk);
 }
@@ -39,12 +39,12 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
         int oldCapacity = chunk->capacity;
         chunk->capacity = GROW_CAPACITY(oldCapacity);
         chunk->code = GROW_ARRAY(uint8_t, chunk->code, oldCapacity, chunk->capacity);
-        chunk->lines = GROW_ARRAY(int, chunk->lines, oldCapacity, chunk->capacity);
     }
 
     chunk->code[chunk->count] = byte;
-    chunk->lines[chunk->count] = line;
     chunk->count++;
+
+    writeLines(&chunk->lines, line);
 }
 
 /*
@@ -53,4 +53,30 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
 int addConstant(Chunk* chunk, Value value) {
     writeValueArray(&chunk->constants, value);
     return chunk->constants.count - 1;
+}
+
+int getLine(Chunk* chunk, int instructionIndex) {
+    printf("Get line called");
+    int* encoded = chunk->lines.lines;
+    int decoded[chunk->count];
+    int count = 0;
+
+    // Creates a decoded array
+    for (int i = 0; i < chunk->lines.count; ++i) {
+        // If 0 or even -> times
+        if (i == 0 || i%2 == 0) {
+            for (int j = 1; j < i; ++j) {
+                decoded[count] = encoded[i+1];
+                count++;
+            }
+        }
+    }
+
+    if (instructionIndex > count - 1) {
+        printf("Instruction index is not valid");
+
+        return 0;
+    }
+
+    return decoded[instructionIndex];
 }

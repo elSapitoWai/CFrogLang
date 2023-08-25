@@ -2,7 +2,8 @@
 // Created by sapo on 23/08/2023.
 //
 
-#include <stdlib.h>
+#include <stdio.h>
+#include "stdlib.h"
 
 #include "memory.h"
 
@@ -23,5 +24,6 @@ void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
 
     void* result = realloc(pointer, newSize);
     if (result == NULL) exit(1);
+
     return result;
 }

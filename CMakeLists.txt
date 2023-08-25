@@ -12,4 +12,6 @@ add_executable(cfroglang main.c
         debug.h
         debug.c
         value.h
-        value.c)
+        value.c
+        lines.h
+        lines.c)
